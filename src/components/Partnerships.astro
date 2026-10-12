@@ -2,6 +2,8 @@
 import Icons from './Icons.astro';
 import { partners } from '../config/partners.ts';
 import { whatsappUrlFor } from '../config/site.ts';
+
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 ---
 
 <section id="alianzas" class="section section--cream partnerships" aria-labelledby="alianzas-title">
@@ -20,7 +22,7 @@ import { whatsappUrlFor } from '../config/site.ts';
           <article class="partner-card" data-reveal aria-labelledby={`partner-${partner.name.toLowerCase().replaceAll(' ', '-')}`}>
             <div class="partner-card__name">
               <h3 id={`partner-${partner.name.toLowerCase().replaceAll(' ', '-')}`} class="sr-only">{partner.name}</h3>
-              <img class="partner-card__logo" src={partner.logo} alt="" aria-hidden="true" />
+              <img class="partner-card__logo" src={`${base}${partner.logo.replace(/^\//, '')}`} alt="" aria-hidden="true" />
             </div>
             <div class="partner-card__details">
               <p>{partner.description}</p>
