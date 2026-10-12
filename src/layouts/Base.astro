@@ -18,7 +18,7 @@ interface Props {
 }
 
 const { title = seo.title, description = seo.description, path = '/', noindex = false, jsonLd = false } = Astro.props;
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 
 const canonical = SITE_URL ? `${SITE_URL}${path}` : undefined;
 const robots = isIndexable && !noindex ? 'index, follow, max-image-preview:large' : 'noindex, nofollow';

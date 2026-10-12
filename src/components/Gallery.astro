@@ -3,7 +3,7 @@ import Photo from './Photo.astro';
 import Icons from './Icons.astro';
 import { gallery } from '../config/images.ts';
 import { social } from '../config/site.ts';
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 
 const ratios = { tall: '3 / 4', wide: '4 / 3', square: '1 / 1' } as const;
 ---
