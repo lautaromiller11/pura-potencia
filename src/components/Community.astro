@@ -1,0 +1,39 @@
+---
+import Photo from './Photo.astro';
+import { photos } from '../config/images.ts';
+---
+
+<section id="comunidad" class="section section--deep on-dark community" aria-labelledby="comunidad-title">
+  <span class="community__circle" aria-hidden="true"></span>
+  <div class="container community__grid">
+    <div data-reveal>
+      <p class="eyebrow">Comunidad</p>
+      <h2 id="comunidad-title" class="display h2">Una escuela para formar parte</h2>
+      <p class="community__quote display">Para las que juegan con el corazón</p>
+      <div class="prose">
+        <p>
+          El fútbol también es compartir la cancha, aprender de las demás y crecer en equipo.
+          En una escuela de fútbol femenino como Pura Potencia, cada entrenamiento suma a algo más grande que un partido.
+        </p>
+        <p><strong>Hay un lugar para vos:</strong> para jugar, para aprender y para ser parte.</p>
+      </div>
+    </div>
+    <div class="community__photo" data-reveal>
+      <Photo photo={photos.community} ratio="4 / 3" sizes="(min-width: 62rem) 30rem, 90vw" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .community__circle {
+    position: absolute; right: -14rem; top: -10rem; width: 34rem; aspect-ratio: 1; border-radius: 50%;
+    border: 3px solid rgba(167, 184, 169, 0.28); pointer-events: none;
+  }
+  .community__grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 3rem; align-items: center; }
+  .community__quote { margin: 2rem 0; font-size: clamp(2rem, 6vw, 3.5rem); color: var(--mist); font-weight: 700; line-height: 0.95; }
+  .community__photo { max-width: 26rem; }
+  @media (min-width: 62rem) {
+    .community__grid { grid-template-columns: 1.2fr 0.8fr; gap: 5rem; }
+    .community__photo { justify-self: end; }
+  }
+</style>

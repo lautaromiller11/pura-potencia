@@ -1,0 +1,42 @@
+---
+/**
+ * Logo de Pura Potencia usado en el encabezado, el pie y páginas internas.
+ */
+import { school } from '../config/school.ts';
+
+interface Props { variant?: 'light' | 'dark'; }
+const { variant = 'light' } = Astro.props;
+
+const LOGO_FILE = variant === 'dark' ? '/brand/logo-white.webp' : '/brand/logo.webp';
+---
+
+{
+  LOGO_FILE ? (
+    <img class="logo-image" src={LOGO_FILE} alt={school.name} />
+  ) : (
+    <span class:list={['logo', `logo--${variant}`]}>
+      <span class="logo__mark" aria-hidden="true">PP</span>
+      <span class="logo__text">
+        <span class="logo__name">Pura Potencia</span>
+        <span class="logo__sub">Fútbol femenino · Rosario</span>
+      </span>
+    </span>
+  )
+}
+
+<style>
+  .logo-image { display: block; width: 9rem; height: auto; }
+  .logo { display: inline-flex; align-items: center; gap: 0.7rem; line-height: 1; }
+  .logo__mark {
+    display: grid; place-items: center;
+    width: 2.5rem; height: 2.5rem;
+    background: var(--deep); color: var(--cream);
+    font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; letter-spacing: 0.02em;
+    clip-path: polygon(0 0, calc(100% - 0.6rem) 0, 100% 0.6rem, 100% 100%, 0 100%);
+  }
+  .logo__text { display: grid; gap: 0.2rem; }
+  .logo__name { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .logo__sub { font-family: var(--font-display); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.16em; opacity: 0.8; }
+  .logo--dark .logo__mark { background: var(--cream); color: var(--ink); }
+  @media (max-width: 26rem) { .logo__sub { display: none; } }
+</style>

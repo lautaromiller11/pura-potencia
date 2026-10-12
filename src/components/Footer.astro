@@ -1,0 +1,56 @@
+---
+import Logo from './Logo.astro';
+import Icons from './Icons.astro';
+import { whatsappUrl, social, nav } from '../config/site.ts';
+import { school } from '../config/school.ts';
+
+const year = new Date().getFullYear();
+const owner = school.legalName ?? school.name;
+const base = import.meta.env.BASE_URL;
+---
+
+<footer class="footer section--ink on-dark">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <Logo variant="dark" />
+      <p>Escuela de fútbol femenino en {school.city}.<br />Entrená con propósito, jugá con potencia.</p>
+    </div>
+
+    <nav aria-label="Pie de página">
+      <h2 class="footer__title">Secciones</h2>
+      <ul>
+        {nav.map((item) => <li><a href={`${base}${item.href}`}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="footer__title">Contacto</h2>
+      <ul>
+        {whatsappUrl && (
+          <li><a class="footer__social" href={whatsappUrl} target="_blank" rel="noopener noreferrer"><Icons name="whatsapp" /> WhatsApp <span class="sr-only">(se abre en una pestaña nueva)</span></a></li>
+        )}
+        <li><a class="footer__social" href={social.instagramUrl} target="_blank" rel="noopener noreferrer"><Icons name="instagram" /> {social.instagramHandle} <span class="sr-only">en Instagram (se abre en una pestaña nueva)</span></a></li>
+        {school.address?.openToPublic && <li>{school.address.street}, {school.address.locality}</li>}
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer__legal">
+    <p>© {year} {owner}. Todos los derechos reservados.</p>
+    <p><a href={`${base}politica-de-privacidad`}>Política de privacidad</a></p>
+  </div>
+</footer>
+
+<style>
+  .footer { padding-block: clamp(3rem, 7vw, 5rem) 2rem; }
+  .footer__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+  .footer__brand p { margin-top: 1.25rem; color: #dcd6c4; }
+  .footer__brand :global(.logo-image) { width: 12rem; }
+  .footer__title { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mist); margin-bottom: 0.9rem; }
+  .footer ul { display: grid; gap: 0.35rem; }
+  .footer a { text-underline-offset: 0.25em; }
+  .footer__social { display: inline-flex; align-items: center; gap: 0.55rem; }
+  .footer__social :global(svg) { width: 1.25rem; height: 1.25rem; }
+  .footer__legal { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(243, 235, 215, 0.25); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem; font-size: 0.95rem; color: #dcd6c4; }
+  @media (min-width: 48rem) { .footer__grid { grid-template-columns: 1.3fr 1fr 1fr; } }
+</style>

@@ -1,0 +1,56 @@
+---
+import Icons from './Icons.astro';
+import { partners } from '../config/partners.ts';
+import { whatsappUrlFor } from '../config/site.ts';
+---
+
+<section id="alianzas" class="section section--cream partnerships" aria-labelledby="alianzas-title">
+  <div class="container">
+    <header class="partnerships__head" data-reveal>
+      <p class="eyebrow">Comunidad</p>
+      <h2 id="alianzas-title" class="display h2">Crecemos en equipo</h2>
+      <p class="lead">Conocé las alianzas que acompañan a nuestra comunidad.</p>
+    </header>
+
+    <div class="partnerships__list">
+      {partners.map((partner) => {
+        const partnerWhatsappUrl = whatsappUrlFor(partner.whatsappMessage);
+        const whatsappHref = partnerWhatsappUrl ?? '#contacto';
+        return (
+          <article class="partner-card" data-reveal aria-labelledby={`partner-${partner.name.toLowerCase().replaceAll(' ', '-')}`}>
+            <div class="partner-card__name">
+              <h3 id={`partner-${partner.name.toLowerCase().replaceAll(' ', '-')}`} class="sr-only">{partner.name}</h3>
+              <img class="partner-card__logo" src={partner.logo} alt="" aria-hidden="true" />
+            </div>
+            <div class="partner-card__details">
+              <p>{partner.description}</p>
+              <div class="partner-card__actions">
+              <a class="btn btn--primary" href={whatsappHref} target={partnerWhatsappUrl ? '_blank' : undefined} rel={partnerWhatsappUrl ? 'noopener noreferrer' : undefined}>
+                {partnerWhatsappUrl && <Icons name="whatsapp" />}
+                Consultar el beneficio
+                {partnerWhatsappUrl && <span class="sr-only"> (se abre en una pestaña nueva)</span>}
+              </a>
+              <a class="btn btn--outline-dark" href={partner.instagramUrl} target="_blank" rel="noopener noreferrer">
+                <Icons name="instagram" /> Instagram de {partner.name}
+                <span class="sr-only"> (se abre en una pestaña nueva)</span>
+              </a>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .partnerships__head { max-width: 48rem; }
+  .partnerships__head .lead { margin-top: 1rem; }
+  .partnerships__list { display: grid; gap: 1rem; margin-top: clamp(2rem, 5vw, 3rem); }
+  .partner-card { display: grid; grid-template-columns: minmax(0, 1fr); border: 2px solid var(--ink); background: var(--cream-2); }
+  .partner-card__name { display: grid; place-items: center; min-height: 12rem; padding: clamp(1.25rem, 4vw, 2.25rem); background: #e4005b; }
+  .partner-card__logo { display: block; width: clamp(8rem, 34vw, 13rem); aspect-ratio: 1; object-fit: cover; border-radius: 50%; }
+  .partner-card__details { display: grid; align-content: center; justify-items: start; gap: 1.25rem; padding: clamp(1.25rem, 4vw, 2.25rem); }
+  .partner-card__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  @media (min-width: 48rem) { .partner-card { grid-template-columns: 0.8fr 1.2fr; } }
+</style>

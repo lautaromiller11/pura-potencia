@@ -1,0 +1,45 @@
+---
+import Photo from './Photo.astro';
+import { photos } from '../config/images.ts';
+---
+
+<section id="escuela" class="section section--cream" aria-labelledby="escuela-title">
+  <div class="container about">
+    <div class="about__text" data-reveal>
+      <p class="eyebrow">La escuela</p>
+      <h2 id="escuela-title" class="display h2">Conocé Pura Potencia</h2>
+      <div class="prose" style="margin-top: 1.75rem">
+        <p>
+          Pura Potencia es una escuela de fútbol femenino en Rosario pensada para las que juegan con el corazón.
+          Acá el fútbol se entrena, se aprende y se comparte: cada práctica es una oportunidad de mejorar y de hacer equipo.
+        </p>
+        <p>
+          Entrenamientos, camisetas, partidos y celebraciones: en el Instagram de la escuela se ve lo que pasa dentro y fuera de la cancha.
+          Si estás buscando clases de fútbol femenino o querés saber cómo es entrenar en una escuela de fútbol para mujeres, escribinos y te contamos.
+        </p>
+      </div>
+      <blockquote class="about__quote display">
+        Lo que soñamos hoy es el futuro que construimos en cada entrenamiento.
+      </blockquote>
+    </div>
+
+    <div class="about__photos" data-reveal>
+      <div class="about__photo about__photo--main"><Photo photo={photos.aboutMain} ratio="4 / 3" sizes="(min-width: 62rem) 32rem, 90vw" /></div>
+      <div class="about__photo about__photo--second"><Photo photo={photos.aboutSecondary} ratio="1 / 1" sizes="(min-width: 62rem) 18rem, 55vw" /></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about { display: grid; grid-template-columns: minmax(0, 1fr); gap: 3rem; align-items: center; }
+  .about__quote {
+    margin-top: 2.5rem; padding-left: 1.25rem; border-left: 6px solid var(--deep);
+    font-size: clamp(1.75rem, 4.5vw, 2.5rem); color: var(--deep); line-height: 1; font-weight: 700;
+  }
+  .about__photos { position: relative; padding-bottom: 3rem; }
+  .about__photo--second { position: absolute; width: 52%; right: 0; bottom: 0; border: 6px solid var(--cream); background: var(--cream); }
+  .about__photo--main { width: 82%; }
+  @media (min-width: 62rem) {
+    .about { grid-template-columns: 1.05fr 1fr; gap: 5rem; }
+  }
+</style>

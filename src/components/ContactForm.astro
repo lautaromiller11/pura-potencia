@@ -1,0 +1,250 @@
+---
+import { REASONS, LIMITS } from '../lib/validation.ts';
+import { whatsappUrl } from '../config/site.ts';
+const base = import.meta.env.BASE_URL;
+const staticPages = import.meta.env.DEPLOY_TARGET === 'github-pages';
+---
+
+<form class="form" id="contact-form" method="post" action={`${base}api/contact`} novalidate data-contact-form data-static-pages={staticPages} data-whatsapp-url={whatsappUrl ?? ''}>
+  <div class="form__summary" role="alert" tabindex="-1" data-summary hidden></div>
+
+  <div class="field">
+    <label for="cf-name">Nombre y apellido <span class="req" aria-hidden="true">*</span><span class="sr-only">(obligatorio)</span></label>
+    <input id="cf-name" name="name" type="text" autocomplete="name" required maxlength={LIMITS.nameMax} aria-describedby="cf-name-error" />
+    <p class="field__error" id="cf-name-error" data-error-for="name" hidden></p>
+  </div>
+
+  <div class="field">
+    <label for="cf-email">Correo electrónico <span class="req" aria-hidden="true">*</span><span class="sr-only">(obligatorio)</span></label>
+    <input id="cf-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength={LIMITS.emailMax} aria-describedby="cf-email-error" />
+    <p class="field__error" id="cf-email-error" data-error-for="email" hidden></p>
+  </div>
+
+  <div class="field">
+    <label for="cf-phone">Teléfono o WhatsApp <span class="opt">(opcional)</span></label>
+    <input id="cf-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength={LIMITS.phoneMax} aria-describedby="cf-phone-error" />
+    <p class="field__error" id="cf-phone-error" data-error-for="phone" hidden></p>
+  </div>
+
+  <div class="field">
+    <label for="cf-reason">Motivo de consulta <span class="opt">(opcional)</span></label>
+    <select id="cf-reason" name="reason" aria-describedby="cf-reason-error">
+      <option value="">Elegí una opción</option>
+      {REASONS.map((r) => <option value={r.value}>{r.label}</option>)}
+    </select>
+    <p class="field__error" id="cf-reason-error" data-error-for="reason" hidden></p>
+  </div>
+
+  <div class="field">
+    <label for="cf-message">Mensaje <span class="req" aria-hidden="true">*</span><span class="sr-only">(obligatorio)</span></label>
+    <textarea id="cf-message" name="message" rows="5" required maxlength={LIMITS.messageMax} aria-describedby="cf-message-error"></textarea>
+    <p class="field__error" id="cf-message-error" data-error-for="message" hidden></p>
+  </div>
+
+  <div class="field field--check">
+    <input id="cf-consent" name="consent" type="checkbox" required aria-describedby="cf-consent-error" />
+    <label for="cf-consent">
+      Leí y acepto la <a href={`${base}politica-de-privacidad`} target="_blank" rel="noopener">política de privacidad<span class="sr-only"> (se abre en una pestaña nueva)</span></a>. <span class="req" aria-hidden="true">*</span><span class="sr-only">(obligatorio)</span>
+    </label>
+    <p class="field__error" id="cf-consent-error" data-error-for="consent" hidden></p>
+  </div>
+
+  <!-- Honeypot anti-spam: invisible para personas y lectores de pantalla. -->
+  <div class="hp" aria-hidden="true">
+    <label for="cf-website">No completar este campo</label>
+    <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <input type="hidden" name="startedAt" value="" data-started />
+
+  <div class="form__actions">
+    <button class="btn btn--primary" type="submit" data-submit>
+      <span data-submit-label>Enviar consulta</span>
+    </button>
+  </div>
+
+  <p class="form__status" role="status" aria-live="polite" data-status></p>
+  <noscript><p class="form__status form__status--error">Para enviar el formulario necesitás activar JavaScript. Mientras tanto, escribinos por WhatsApp o Instagram.</p></noscript>
+</form>
+
+<style>
+  .form { display: grid; gap: 1.25rem; }
+  .field { display: grid; gap: 0.4rem; }
+  .field label { font-weight: 600; font-size: 1rem; }
+  .req { color: var(--deep); font-weight: 800; }
+  .opt { font-weight: 400; color: #4a554f; }
+  input[type='text'], input[type='email'], input[type='tel'], select, textarea {
+    width: 100%; min-height: 3.25rem; padding: 0.75rem 1rem;
+    background: #fff; border: 2px solid var(--ink); border-radius: var(--radius);
+    font-size: 1rem;
+  }
+  textarea { resize: vertical; min-height: 9rem; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--deep); outline-offset: 2px; }
+  [aria-invalid='true'] { border-color: var(--error); border-width: 3px; background: #fff7f6; }
+  .field__error { color: var(--error); font-weight: 600; font-size: 0.95rem; display: flex; gap: 0.4rem; align-items: flex-start; }
+  .field__error::before { content: '⚠'; flex: none; }
+  .field__error[hidden] { display: none; }
+
+  .field--check { grid-template-columns: auto 1fr; align-items: start; column-gap: 0.75rem; }
+  .field--check input { width: 1.5rem; height: 1.5rem; margin-top: 0.15rem; accent-color: var(--deep); }
+  .field--check label { font-weight: 400; }
+  .field--check .field__error { grid-column: 1 / -1; }
+
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .form__summary { border: 3px solid var(--error); background: #fff7f6; color: var(--error); padding: 1rem 1.25rem; font-weight: 600; border-radius: var(--radius); }
+  .form__summary[hidden] { display: none; }
+  .form__actions { display: flex; }
+  .form__status { min-height: 1.5rem; font-weight: 600; }
+  .form__status--success { color: var(--deep); border-left: 6px solid var(--deep); padding: 0.75rem 1rem; background: #e6efe6; }
+  .form__status--success::before { content: '✔ '; }
+  .form__status--error { color: var(--error); border-left: 6px solid var(--error); padding: 0.75rem 1rem; background: #fff7f6; }
+  .form__status--error::before { content: '⚠ '; }
+  .form__status a { color: inherit; }
+</style>
+
+<script>
+  import { normalize, validate, type FieldErrors, type FieldName } from '../lib/validation.ts';
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  if (form) {
+    const summary = form.querySelector<HTMLElement>('[data-summary]')!;
+    const statusEl = form.querySelector<HTMLElement>('[data-status]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]')!;
+    const started = form.querySelector<HTMLInputElement>('[data-started]')!;
+    const staticPages = form.dataset.staticPages === 'true';
+    started.value = String(Date.now());
+
+    const order: FieldName[] = ['name', 'email', 'phone', 'reason', 'message', 'consent'];
+    const fieldFor = (name: FieldName) => form.elements.namedItem(name) as HTMLInputElement | null;
+    const errorFor = (name: FieldName) => form.querySelector<HTMLElement>(`[data-error-for="${name}"]`)!;
+
+    const read = () => {
+      const data = new FormData(form);
+      return normalize({
+        name: data.get('name'), email: data.get('email'), phone: data.get('phone'),
+        reason: data.get('reason'), message: data.get('message'),
+        consent: form.querySelector<HTMLInputElement>('#cf-consent')!.checked,
+        website: data.get('website'), startedAt: Number(started.value),
+      });
+    };
+
+    const setFieldError = (name: FieldName, message?: string) => {
+      const field = fieldFor(name);
+      const el = errorFor(name);
+      if (message) {
+        el.textContent = message;
+        el.hidden = false;
+        field?.setAttribute('aria-invalid', 'true');
+      } else {
+        el.textContent = '';
+        el.hidden = true;
+        field?.removeAttribute('aria-invalid');
+      }
+    };
+
+    const applyErrors = (errors: FieldErrors) => {
+      order.forEach((name) => setFieldError(name, errors[name]));
+    };
+
+    const showSummary = (errors: FieldErrors) => {
+      const names = order.filter((n) => errors[n]);
+      summary.textContent = `Revisá ${names.length === 1 ? 'el campo marcado' : 'los campos marcados'} antes de enviar.`;
+      summary.hidden = false;
+    };
+
+    const setStatus = (kind: 'success' | 'error' | '', html = '') => {
+      statusEl.className = 'form__status' + (kind ? ` form__status--${kind}` : '');
+      statusEl.textContent = html;
+    };
+
+    const setLoading = (loading: boolean) => {
+      submit.disabled = loading;
+      submit.setAttribute('aria-busy', String(loading));
+      submitLabel.textContent = loading ? 'Preparando…' : (staticPages ? 'Continuar por WhatsApp' : 'Enviar consulta');
+    };
+
+    // Validación al salir de cada campo (solo si ya se intentó enviar o el campo tiene contenido)
+    form.addEventListener('focusout', (event) => {
+      const target = event.target as HTMLInputElement;
+      const name = target?.name as FieldName | undefined;
+      if (!name || !order.includes(name)) return;
+      const result = validate(read());
+      const error = result.ok ? undefined : result.errors[name];
+      const touched = target.value !== '' || target.getAttribute('aria-invalid') === 'true';
+      if (touched || error === undefined) setFieldError(name, error);
+    });
+    form.addEventListener('input', (event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.getAttribute?.('aria-invalid') === 'true') {
+        const result = validate(read());
+        setFieldError(target.name as FieldName, result.ok ? undefined : result.errors[target.name as FieldName]);
+      }
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      setStatus('');
+      summary.hidden = true;
+
+      const input = read();
+      const result = validate(input);
+      if (!result.ok) {
+        applyErrors(result.errors);
+        showSummary(result.errors);
+        const first = order.find((n) => result.errors[n]);
+        if (first) fieldFor(first)?.focus();
+        return;
+      }
+      applyErrors({});
+
+      if (staticPages) {
+        const waUrl = form.dataset.whatsappUrl;
+        if (!waUrl) {
+          setStatus('error', 'El contacto por WhatsApp no está disponible en este momento.');
+          return;
+        }
+        const message = [
+          'Hola! Quiero hacer una consulta a Pura Potencia.',
+          `Nombre: ${input.name}`,
+          `Email: ${input.email}`,
+          input.phone ? `Teléfono: ${input.phone}` : '',
+          input.reason ? `Motivo: ${input.reason}` : '',
+          `Consulta: ${input.message}`,
+        ].filter(Boolean).join('\\n');
+        window.open(`${waUrl.split('?')[0]}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+        setStatus('success', 'Se abrió WhatsApp con tu consulta lista para enviar.');
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(input),
+        });
+        const body = (await response.json().catch(() => null)) as
+          | { ok?: boolean; message?: string; errors?: FieldErrors }
+          | null;
+
+        if (response.ok && body?.ok) {
+          form.reset();
+          started.value = String(Date.now());
+          setStatus('success', body.message ?? '¡Gracias! Recibimos tu consulta.');
+        } else if (response.status === 422 && body?.errors) {
+          applyErrors(body.errors);
+          showSummary(body.errors);
+          const first = order.find((n) => body.errors?.[n]);
+          if (first) fieldFor(first)?.focus();
+        } else {
+          setStatus('error', body?.message ?? 'No pudimos enviar tu consulta. Probá de nuevo en unos minutos.');
+        }
+      } catch {
+        setStatus('error', 'No pudimos conectarnos. Revisá tu conexión e intentá de nuevo.');
+      } finally {
+        setLoading(false);
+      }
+    });
+  }
+</script>

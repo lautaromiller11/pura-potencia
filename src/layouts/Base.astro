@@ -1,0 +1,106 @@
+---
+import '../styles/global.css';
+import { SITE_URL, isIndexable, seo, absoluteUrl, social, whatsappUrl } from '../config/site.ts';
+import { school } from '../config/school.ts';
+// Fuentes críticas (titulares, navegación y texto): se precargan para evitar saltos de diseño.
+import barlow800 from '@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2?url';
+import barlow700 from '@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2?url';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Ruta canónica, por ejemplo "/" o "/politica-de-privacidad". */
+  path?: string;
+  /** Fuerza noindex en esta página (además de la regla global). */
+  noindex?: boolean;
+  jsonLd?: boolean;
+}
+
+const { title = seo.title, description = seo.description, path = '/', noindex = false, jsonLd = false } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const canonical = SITE_URL ? `${SITE_URL}${path}` : undefined;
+const robots = isIndexable && !noindex ? 'index, follow, max-image-preview:large' : 'noindex, nofollow';
+const ogImage = SITE_URL ? absoluteUrl(seo.ogImagePath) : undefined;
+
+/**
+ * Datos estructurados: solo con información confirmada.
+ * La entidad principal es la organización deportiva; las sedes son lugares de
+ * entrenamiento de terceros y no se describen como sucursales propias.
+ * No se incluyen reseñas, valoraciones, precios, coordenadas ni horarios.
+ */
+const sameAs = [social.instagramUrl];
+const address = school.address
+  ? {
+      '@type': 'PostalAddress',
+      streetAddress: school.address.street,
+      addressLocality: school.address.locality,
+      ...(school.address.postalCode ? { postalCode: school.address.postalCode } : {}),
+      addressRegion: school.region,
+      addressCountry: school.country,
+    }
+  : undefined;
+const hasPublicAddress = Boolean(school.address?.openToPublic);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'SportsOrganization',
+  '@id': SITE_URL ? `${SITE_URL}/#organization` : undefined,
+  name: school.name,
+  alternateName: school.fullName,
+  ...(SITE_URL ? { logo: absoluteUrl('/brand/logo.webp') } : {}),
+  ...(school.legalName ? { legalName: school.legalName } : {}),
+  description,
+  url: SITE_URL ? `${SITE_URL}/` : undefined,
+  sport: 'Fútbol femenino',
+  sameAs,
+  areaServed: {
+    '@type': 'City',
+    name: school.city,
+    containedInPlace: { '@type': 'AdministrativeArea', name: school.region },
+  },
+  ...(hasPublicAddress && address ? { address } : {}),
+  ...(whatsappUrl ? { contactPoint: { '@type': 'ContactPoint', contactType: 'customer service', url: whatsappUrl, availableLanguage: 'es-AR' } } : {}),
+};
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <meta name="theme-color" content="#155E50" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="icon" href={`${base}favicon.svg?v=2`} type="image/svg+xml" />
+    <link rel="sitemap" type="application/xml" href={`${base}sitemap.xml`} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content={school.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta property="og:image:width" content="1200" />}
+    {ogImage && <meta property="og:image:height" content="630" />}
+    {ogImage && <meta property="og:image:alt" content={seo.ogImageAlt} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+
+    {[barlow800, barlow700, interLatin].map((href) => (
+      <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
+    ))}
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <slot />
+  </body>
+</html>

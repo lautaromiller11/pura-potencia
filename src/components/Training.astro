@@ -1,0 +1,95 @@
+---
+import Icons from './Icons.astro';
+import { trainingVenues, teamCoordinationMessage } from '../config/locations.ts';
+import { whatsappUrlFor } from '../config/site.ts';
+
+const teamWhatsappUrl = whatsappUrlFor(teamCoordinationMessage);
+---
+
+<section id="entrenamientos" class="section section--cream training" aria-labelledby="entrenamientos-title">
+  <div class="container">
+    <header class="training__head" data-reveal>
+      <p class="eyebrow">Entrenamientos</p>
+      <h2 id="entrenamientos-title" class="display h2">Encontrá tu lugar en la cancha</h2>
+      <p class="lead">Conocé nuestras sedes y consultá los horarios de entrenamiento.</p>
+    </header>
+
+    <div class="training__venues" data-reveal>
+      {trainingVenues.map((venue) => {
+        const venueWhatsappUrl = whatsappUrlFor(venue.whatsappMessage);
+        return (
+          <article class="venue-card" aria-labelledby={`${venue.id}-title`}>
+            <div class="venue-card__topline" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="venue-card__content">
+              <p class="venue-card__eyebrow">Sede de entrenamiento</p>
+              <h3 id={`${venue.id}-title`} class="display h3">{venue.name}</h3>
+              <address>{venue.address}, {venue.locality}</address>
+              <a class="venue-card__map" href={venue.mapsUrl} target="_blank" rel="noopener noreferrer">
+                Ver ubicación en Google Maps <span aria-hidden="true">↗</span>
+                <span class="sr-only"> (se abre en una pestaña nueva)</span>
+              </a>
+              <ul class="venue-card__groups" aria-label={`Grupos y horarios en ${venue.name}`}>
+                {venue.groups.map((group) => (
+                  <li>
+                    <span class="venue-card__group">{group.label}</span>
+                    <span class="venue-card__days">{group.days}</span>
+                    <time>{group.time}</time>
+                  </li>
+                ))}
+              </ul>
+              <a class="btn btn--primary venue-card__cta" href={venueWhatsappUrl ?? '#contacto'} target={venueWhatsappUrl ? '_blank' : undefined} rel={venueWhatsappUrl ? 'noopener noreferrer' : undefined}>
+                {venueWhatsappUrl && <Icons name="whatsapp" />}
+                Consultar por {venue.name}
+                {venueWhatsappUrl && <span class="sr-only"> por WhatsApp (se abre en una pestaña nueva)</span>}
+              </a>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <p class="training__note">Los días y horarios corresponden a la información publicada por la escuela. Consultá la disponibilidad y confirmalos antes de asistir.</p>
+
+    <div class="training__team" data-reveal>
+      <div>
+        <p class="eyebrow">¿Ya tenés tu equipo?</p>
+        <p class="training__team-copy">Escribinos para coordinar el día y el horario de entrenamiento.</p>
+      </div>
+      <a class="btn btn--primary" href={teamWhatsappUrl ?? '#contacto'} target={teamWhatsappUrl ? '_blank' : undefined} rel={teamWhatsappUrl ? 'noopener noreferrer' : undefined}>
+        {teamWhatsappUrl && <Icons name="whatsapp" />}
+        Coordinar entrenamiento
+        {teamWhatsappUrl && <span class="sr-only"> por WhatsApp (se abre en una pestaña nueva)</span>}
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .training__head { max-width: 52rem; }
+  .training__head .lead { margin-top: 1rem; }
+  .training__venues { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin-top: clamp(2rem, 5vw, 3.5rem); }
+  .venue-card { overflow: hidden; background: var(--cream-2); border: 2px solid var(--ink); }
+  .venue-card__topline { display: flex; gap: 0.35rem; padding: 0.7rem 1rem; background: var(--deep); }
+  .venue-card__topline span { width: 0.45rem; height: 0.45rem; border-radius: 50%; background: var(--mist); }
+  .venue-card__content { padding: clamp(1.25rem, 3vw, 2rem); }
+  .venue-card__eyebrow { color: var(--deep); font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .venue-card h3 { margin-top: 0.25rem; }
+  .venue-card address { margin-top: 0.65rem; font-style: normal; font-weight: 600; }
+  .venue-card__map { display: inline-block; margin-top: 0.35rem; font-weight: 600; text-underline-offset: 0.2em; }
+  .venue-card__groups { display: grid; margin-block: 1.5rem; border-top: 1px solid rgba(17, 24, 21, 0.25); }
+  .venue-card__groups li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.2rem 0.75rem; padding: 1rem 0; border-bottom: 1px solid rgba(17, 24, 21, 0.25); }
+  .venue-card__group { grid-column: 1 / -1; color: var(--deep); font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; text-transform: uppercase; }
+  .venue-card__days { font-weight: 600; }
+  .venue-card__groups time { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .venue-card__cta { width: 100%; }
+  .training__note { margin-top: 1.25rem; color: #46534b; font-size: 0.95rem; }
+  .training__team { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; margin-top: 2rem; padding: clamp(1.25rem, 3vw, 2rem); background: var(--deep); color: var(--cream); }
+  .training__team .eyebrow { color: var(--mist); }
+  .training__team-copy { margin-top: 0.35rem; font-size: 1.1rem; }
+  .training__team .btn { background: var(--cream); color: var(--ink); }
+  @media (min-width: 42rem) {
+    .training__venues { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .training__team { flex-direction: row; align-items: center; justify-content: space-between; }
+  }
+</style>

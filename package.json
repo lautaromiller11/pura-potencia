@@ -1,0 +1,25 @@
+{
+  "name": "pura-potencia-web",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "prebuild": "node scripts/check-config.mjs",
+    "build": "astro check && astro build",
+    "build:fast": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "node --test tests/*.test.ts",
+    "make-og": "node scripts/make-og.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/vercel": "^11.0.14",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "astro": "^7.3.8",
+    "sharp": "^0.35.5",
+    "typescript": "^6.0.3"
+  }
+}

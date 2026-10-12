@@ -1,0 +1,67 @@
+---
+import Photo from './Photo.astro';
+import Icons from './Icons.astro';
+import { gallery } from '../config/images.ts';
+import { social } from '../config/site.ts';
+const base = import.meta.env.BASE_URL;
+
+const ratios = { tall: '3 / 4', wide: '4 / 3', square: '1 / 1' } as const;
+---
+
+<section id="galeria" class="section section--cream" aria-labelledby="galeria-title">
+  <div class="container">
+    <div class="gallery__head" data-reveal>
+      <div>
+        <p class="eyebrow">Galería</p>
+        <h2 id="galeria-title" class="display h2">Así se vive Pura Potencia</h2>
+      </div>
+      <p class="lead">Entrenamientos, equipos, partidos y celebraciones.</p>
+    </div>
+
+    <ul class="gallery" data-reveal>
+      {gallery.map((slot) => (
+        <li class:list={['gallery__item', `gallery__item--${slot.size}`]}>
+          <Photo
+            photo={slot}
+            ratio={ratios[slot.size]}
+            sizes={slot.size === 'wide'
+              ? '(min-width: 76rem) 50rem, (min-width: 48rem) 60vw, 90vw'
+              : '(min-width: 76rem) 26rem, (min-width: 48rem) 30vw, 45vw'}
+          />
+        </li>
+      ))}
+      <li class="gallery__video-item">
+        <video controls playsinline preload="metadata" poster={`${base}images/pura-potencia-video.jpg`} aria-label="Video de Pura Potencia en la cancha">
+          <source src={`${base}videos/pura-potencia.mp4`} type="video/mp4" />
+          Tu navegador no puede reproducir este video.
+        </video>
+      </li>
+    </ul>
+
+    <p class="gallery__more">
+      <a class="btn btn--outline btn--outline-dark" href={social.instagramUrl} target="_blank" rel="noopener noreferrer">
+        <Icons name="instagram" /> Ver más en el Instagram de Pura Potencia <span class="sr-only">(se abre en una pestaña nueva)</span>
+      </a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .gallery__head { display: grid; gap: 1rem; align-items: end; margin-bottom: clamp(2rem, 5vw, 3.5rem); }
+  .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; grid-auto-flow: row; }
+  .gallery__item { min-width: 0; min-height: 0; overflow: hidden; }
+  .gallery__item--tall { aspect-ratio: 3 / 4; }
+  .gallery__item--wide { aspect-ratio: 4 / 3; }
+  .gallery__item--square { aspect-ratio: 1 / 1; }
+  .gallery__item--wide { grid-column: span 2; }
+  .gallery__item :global(.photo) { height: 100%; }
+  .gallery__video-item { grid-column: span 2; min-width: 0; min-height: 0; overflow: hidden; aspect-ratio: 9 / 16; background: var(--ink); }
+  .gallery__video-item video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .gallery__more { margin-top: 2.5rem; }
+  @media (min-width: 48rem) {
+    .gallery__head { grid-template-columns: 1fr 1fr; }
+    .gallery__head .lead { justify-self: end; }
+    .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+    .gallery__video-item { grid-column: 3; grid-row: 1 / span 2; aspect-ratio: auto; }
+  }
+</style>

@@ -1,0 +1,141 @@
+---
+import Icons from './Icons.astro';
+import { nav, social, whatsappUrl } from '../config/site.ts';
+---
+
+<header class="site-header" data-header>
+  <div class="site-header__bar container">
+    <a class="site-header__logo" href="#inicio">
+      <span class="site-header__wordmark" aria-label="Pura Potencia, Escuela de Fútbol Femenino">
+        <span class="site-header__name">PURA<br />POTENCIA</span>
+        <span class="site-header__tagline">ESCUELA DE FÚTBOL FEMENINO</span>
+      </span>
+    </a>
+
+    <nav id="menu-principal" class="site-header__nav" aria-label="Principal" data-nav>
+      <ul>
+        {nav.map((item) => (
+          <li><a href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+      <a class="btn btn--primary btn--sm site-header__cta-mobile" href={whatsappUrl ?? '#contacto'} target={whatsappUrl ? '_blank' : undefined} rel={whatsappUrl ? 'noopener noreferrer' : undefined}>
+        {whatsappUrl && <Icons name="whatsapp" />}{whatsappUrl ? ' Escribinos' : 'Quiero sumarme'}
+      </a>
+      <a class="btn btn--outline-dark btn--sm site-header__instagram-mobile" href={social.instagramUrl} target="_blank" rel="noopener noreferrer">
+        <Icons name="instagram" /> Instagram
+        <span class="sr-only"> de Pura Potencia (se abre en una pestaña nueva)</span>
+      </a>
+    </nav>
+
+    <div class="site-header__actions">
+      <a class="btn btn--primary btn--sm site-header__cta" href={whatsappUrl ?? '#contacto'} target={whatsappUrl ? '_blank' : undefined} rel={whatsappUrl ? 'noopener noreferrer' : undefined}>
+        {whatsappUrl && <Icons name="whatsapp" />}{whatsappUrl ? ' Escribinos' : 'Quiero sumarme'}
+      </a>
+      <a class="btn btn--outline-dark btn--sm site-header__instagram" href={social.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label={`Instagram de Pura Potencia ${social.instagramHandle}`}>
+        <Icons name="instagram" /><span>Instagram</span>
+      </a>
+    </div>
+
+    <button
+      type="button"
+      class="menu-toggle"
+      aria-expanded="false"
+      aria-controls="menu-principal"
+      data-menu-toggle
+    >
+      <span class="sr-only" data-menu-label>Abrir menú</span>
+      <span class="menu-toggle__open"><Icons name="menu" /></span>
+      <span class="menu-toggle__close"><Icons name="close" /></span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--cream);
+    border-bottom: 2px solid var(--ink);
+  }
+  .site-header__bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: var(--header-h); }
+  .site-header__logo { text-decoration: none; display: inline-flex; }
+  .site-header__wordmark { display: grid; justify-items: start; gap: 0.08rem; color: var(--deep); line-height: 1; }
+  .site-header__name { font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; letter-spacing: 0.015em; line-height: 0.8; }
+  .site-header__tagline { font-family: var(--font-display); font-size: 0.48rem; font-weight: 700; letter-spacing: 0.055em; white-space: nowrap; }
+  .site-header__nav ul { display: flex; gap: 0.25rem; }
+  .site-header__nav a:not(.btn) {
+    display: inline-block; padding: 0.5rem 0.8rem;
+    font-family: var(--font-display); font-weight: 700; font-size: 1.1875rem; letter-spacing: 0.07em; text-transform: uppercase;
+    text-decoration: none; border-bottom: 3px solid transparent;
+  }
+  .site-header__nav a:not(.btn):hover { border-bottom-color: var(--deep); }
+  .site-header__cta, .site-header__instagram { display: none; }
+  .site-header__actions { display: none; }
+  .site-header__cta-mobile, .site-header__instagram-mobile { display: none; }
+
+  .menu-toggle {
+    display: none; place-items: center;
+    width: 3rem; height: 3rem; padding: 0;
+    background: var(--ink); color: var(--cream); border: 0; border-radius: var(--radius); cursor: pointer;
+  }
+  .menu-toggle :global(svg) { width: 1.5rem; height: 1.5rem; }
+  .menu-toggle__close { display: none; }
+  .menu-toggle[aria-expanded='true'] .menu-toggle__open { display: none; }
+  .menu-toggle[aria-expanded='true'] .menu-toggle__close { display: block; }
+
+  /* Escritorio */
+  @media (min-width: 80rem) {
+    .site-header__actions { display: flex; align-items: center; gap: 0.65rem; margin-left: auto; }
+    .site-header__cta, .site-header__instagram { display: inline-flex; }
+  }
+
+  /* Móvil y pantallas medianas: menú desplegable (solo se oculta si hay JS) */
+  @media (max-width: 79.99rem) {
+    :global(.js) .menu-toggle { display: grid; }
+    :global(.js) .site-header__nav {
+      display: none;
+      position: absolute; inset: var(--header-h) 0 auto 0;
+      background: var(--cream); border-bottom: 2px solid var(--ink);
+      padding: 0.75rem var(--gutter) 1.5rem;
+    }
+    :global(.js) .site-header__nav[data-open='true'] { display: block; }
+    .site-header__nav ul { flex-direction: column; gap: 0; }
+    .site-header__nav a:not(.btn) { display: block; padding: 0.85rem 0; font-size: 1.5rem; border-bottom: 1px solid rgba(17, 24, 21, 0.18); }
+    .site-header__cta-mobile { display: flex; margin-top: 1.25rem; }
+    .site-header__instagram-mobile { display: flex; margin-top: 0.75rem; }
+    /* Sin JS: el menú se muestra en una fila que se ajusta */
+    :global(html:not(.js)) .site-header__bar { height: auto; flex-wrap: wrap; padding-block: 0.75rem; }
+    :global(html:not(.js)) .site-header__nav ul { flex-direction: row; flex-wrap: wrap; }
+    :global(html:not(.js)) .site-header__nav a:not(.btn) { font-size: 1rem; border: 0; padding: 0.4rem 0.6rem; }
+    :global(html:not(.js)) .site-header__cta-mobile { display: none; }
+    :global(html:not(.js)) .site-header__instagram-mobile { display: none; }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  const label = document.querySelector<HTMLElement>('[data-menu-label]');
+
+  if (toggle && nav) {
+    const setOpen = (open: boolean, returnFocus = false) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      nav.dataset.open = String(open);
+      if (label) label.textContent = open ? 'Cerrar menú' : 'Abrir menú';
+      if (!open && returnFocus) toggle.focus();
+    };
+
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    nav.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') setOpen(false, true);
+    });
+    // Cerrar al hacer foco fuera del header (navegación por teclado)
+    document.addEventListener('focusin', (event) => {
+      const header = toggle.closest('[data-header]');
+      if (toggle.getAttribute('aria-expanded') === 'true' && header && !header.contains(event.target as Node)) setOpen(false);
+    });
+    window.matchMedia('(min-width: 80rem)').addEventListener('change', (e) => e.matches && setOpen(false));
+  }
+</script>

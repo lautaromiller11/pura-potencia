@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Training from '../components/Training.astro';
+import Community from '../components/Community.astro';
+import Partnerships from '../components/Partnerships.astro';
+import Gallery from '../components/Gallery.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base path="/" jsonLd>
+  <Header />
+  <main id="contenido">
+    <Hero />
+    <About />
+    <Training />
+    <Community />
+    <Partnerships />
+    <Gallery />
+    <Contact />
+  </main>
+  <Footer />
+  <script>
+    // Revelado sutil al hacer scroll. Respeta prefers-reduced-motion (el CSS ya lo desactiva).
+    const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) {
+      items.forEach((el) => el.classList.add('is-visible'));
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+        }),
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+      );
+      items.forEach((el) => io.observe(el));
+      // Red de seguridad: nunca dejar contenido oculto.
+      setTimeout(() => items.forEach((el) => el.classList.add('is-visible')), 4000);
+    }
+  </script>
+</Base>

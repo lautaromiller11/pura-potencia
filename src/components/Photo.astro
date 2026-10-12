@@ -1,0 +1,47 @@
+---
+import { Picture } from 'astro:assets';
+import type { PhotoSlot } from '../config/images.ts';
+
+interface Props {
+  photo: PhotoSlot;
+  /** Proporción CSS, por ejemplo "4 / 3" o "3 / 4". */
+  ratio?: string;
+  /** Atributo sizes para imágenes responsivas. */
+  sizes?: string;
+  /** true solo para la imagen principal (LCP): carga inmediata y prioridad alta. */
+  priority?: boolean;
+  /** Ocupa todo el alto de su contenedor. */
+  fill?: boolean;
+}
+
+const { photo, ratio = '4 / 3', sizes = '(min-width: 76rem) 40rem, 100vw', priority = false, fill = false } = Astro.props;
+
+const modules = import.meta.glob<{ default: ImageMetadata }>('/src/assets/photos/*.{jpg,jpeg,png,webp,avif}', { eager: true });
+const image = photo.file ? modules[`/src/assets/photos/${photo.file}`]?.default : undefined;
+
+if (photo.file && !image) {
+  console.warn(`[Photo] No se encontró src/assets/photos/${photo.file}. Se muestra el placeholder.`);
+}
+---
+
+{
+  image ? (
+    <div class:list={['photo', { 'photo--fill': fill }]} style={`--ratio: ${ratio}`}>
+      <Picture
+        src={image}
+        alt={photo.alt}
+        formats={['avif', 'webp']}
+        quality={90}
+        widths={[480, 768, 1100, 1600]}
+        sizes={sizes}
+        loading={priority ? 'eager' : 'lazy'}
+        fetchpriority={priority ? 'high' : 'auto'}
+        decoding={priority ? 'sync' : 'async'}
+      />
+    </div>
+  ) : (
+    <div class:list={['photo', 'photo--placeholder', { 'photo--fill': fill }]} style={`--ratio: ${ratio}`} aria-hidden="true">
+      {import.meta.env.DEV && <span class="photo__hint">Foto pendiente → src/assets/photos/ · {photo.suggested}</span>}
+    </div>
+  )
+}

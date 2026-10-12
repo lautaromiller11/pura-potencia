@@ -1,0 +1,53 @@
+---
+import Photo from './Photo.astro';
+import Icons from './Icons.astro';
+import { photos } from '../config/images.ts';
+import { whatsappUrl } from '../config/site.ts';
+---
+
+<section id="inicio" class="hero section--deep on-dark" aria-labelledby="hero-title">
+  <div class="hero__inner">
+    <div class="hero__text container">
+      <p class="eyebrow">Hay un lugar para vos</p>
+      <h1 id="hero-title" class="display h1">
+        <span class="hero__headline-main">Escuela de fútbol femenino</span>
+        <span class="hero__headline-location">en Rosario</span>
+      </h1>
+      <p class="lead hero__lead">
+        Entrená con propósito, jugá con potencia. Conocé Pura Potencia, consultá por nuestras sedes y horarios.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--cream" href={whatsappUrl ?? '#contacto'} target={whatsappUrl ? '_blank' : undefined} rel={whatsappUrl ? 'noopener noreferrer' : undefined}>
+          {whatsappUrl ? <><Icons name="whatsapp" /> Escribinos por WhatsApp</> : <>Quiero sumarme <Icons name="arrow" /></>}
+        </a>
+        <a class="btn btn--outline" href="#escuela">Conocé la escuela</a>
+      </div>
+    </div>
+
+    <div class="hero__photo">
+      <Photo photo={photos.hero} ratio="4 / 5" priority fill sizes="(min-width: 62rem) 50vw, 100vw" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { overflow: hidden; padding: 0; }
+  .hero__inner { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .hero__text { padding-block: clamp(2.5rem, 8vw, 5rem); display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  .hero__text .eyebrow { margin-bottom: 0; }
+  .hero__text .h1 { font-size: clamp(2rem, 3.4vw, 3.25rem); line-height: 0.98; }
+  .hero__headline-main, .hero__headline-location { display: block; }
+  .hero__lead { color: #f3ebd7; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 0.5rem; }
+  .hero__photo { min-height: 22rem; }
+  .hero__photo :global(.photo) { clip-path: none; aspect-ratio: 4 / 5; }
+  .hero__photo :global(.photo--fill) { height: auto; min-height: 0; }
+
+  @media (min-width: 62rem) {
+    .hero__inner { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); min-height: min(46rem, calc(100svh - var(--header-h))); }
+    /* El texto se alinea con el contenedor general aunque la foto llegue al borde */
+    .hero__text { width: auto; margin: 0; padding-left: max(var(--gutter), calc((100vw - var(--max)) / 2)); padding-right: 3rem; justify-content: center; }
+    .hero__photo { min-height: 100%; }
+    .hero__photo :global(.photo) { aspect-ratio: auto; height: 100%; min-height: 100%; }
+  }
+</style>
