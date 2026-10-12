@@ -1,7 +1,11 @@
-export interface TrainingGroup {
-  label: string;
+export interface TrainingSchedule {
   days: string;
   time: string;
+}
+
+export interface TrainingLevel {
+  label: string;
+  schedules: TrainingSchedule[];
 }
 
 export interface TrainingVenue {
@@ -9,7 +13,7 @@ export interface TrainingVenue {
   name: string;
   address: string;
   locality: string;
-  groups: TrainingGroup[];
+  levels: TrainingLevel[];
   whatsappMessage: string;
   mapsUrl: string;
 }
@@ -19,15 +23,24 @@ const mapsSearch = (address: string) =>
 
 export const trainingVenues: TrainingVenue[] = [
   {
-    id: 'nexo-sports',
-    name: 'Nexo Sports',
+    id: 'martino-complejos',
+    name: 'Martino Complejos',
     address: 'Corrientes 2066',
     locality: 'Rosario, Santa Fe',
-    groups: [
-      { label: 'Grupo 1', days: 'Lunes y miércoles', time: '19:00–20:00' },
-      { label: 'Grupo 2', days: 'Martes y jueves', time: '19:00–20:00' },
+    levels: [
+      {
+        label: 'Principiante',
+        schedules: [
+          { days: 'Martes y jueves', time: '19:00' },
+          { days: 'Miércoles y viernes', time: '19:00' },
+        ],
+      },
+      {
+        label: 'Intermedio',
+        schedules: [{ days: 'Lunes y miércoles', time: '20:00' }],
+      },
     ],
-    whatsappMessage: 'Hola, quería consultar por los entrenamientos de Pura Potencia en Nexo Sports.',
+    whatsappMessage: 'Hola, quería consultar por los entrenamientos de Pura Potencia en Martino Complejos.',
     mapsUrl: mapsSearch('Corrientes 2066, Rosario, Santa Fe, Argentina'),
   },
   {
@@ -35,8 +48,11 @@ export const trainingVenues: TrainingVenue[] = [
     name: 'Pichincha Point',
     address: 'Brown 3135',
     locality: 'Rosario, Santa Fe',
-    groups: [
-      { label: 'Grupo 3', days: 'Martes y jueves', time: '19:00–20:00' },
+    levels: [
+      {
+        label: 'Principiante',
+        schedules: [{ days: 'Martes y jueves', time: '19:00' }],
+      },
     ],
     whatsappMessage: 'Hola, quería consultar por los entrenamientos de Pura Potencia en Pichincha Point.',
     mapsUrl: mapsSearch('Brown 3135, Rosario, Santa Fe, Argentina'),

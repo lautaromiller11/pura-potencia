@@ -28,15 +28,21 @@ const teamWhatsappUrl = whatsappUrlFor(teamCoordinationMessage);
                 Ver ubicación en Google Maps <span aria-hidden="true">↗</span>
                 <span class="sr-only"> (se abre en una pestaña nueva)</span>
               </a>
-              <ul class="venue-card__groups" aria-label={`Grupos y horarios en ${venue.name}`}>
-                {venue.groups.map((group) => (
-                  <li>
-                    <span class="venue-card__group">{group.label}</span>
-                    <span class="venue-card__days">{group.days}</span>
-                    <time>{group.time}</time>
-                  </li>
+              <div class="venue-card__levels" aria-label={`Niveles y horarios en ${venue.name}`}>
+                {venue.levels.map((level) => (
+                  <div class="venue-card__level">
+                    <h4 class="venue-card__group">{level.label}</h4>
+                    <ul class="venue-card__schedules">
+                      {level.schedules.map((schedule) => (
+                        <li>
+                          <span class="venue-card__days">{schedule.days}</span>
+                          <time datetime={schedule.time}>{schedule.time} h</time>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
+              </div>
               <a class="btn btn--primary venue-card__cta" href={venueWhatsappUrl ?? '#contacto'} target={venueWhatsappUrl ? '_blank' : undefined} rel={venueWhatsappUrl ? 'noopener noreferrer' : undefined}>
                 {venueWhatsappUrl && <Icons name="whatsapp" />}
                 Consultar por {venue.name}
@@ -77,11 +83,13 @@ const teamWhatsappUrl = whatsappUrlFor(teamCoordinationMessage);
   .venue-card h3 { margin-top: 0.25rem; }
   .venue-card address { margin-top: 0.65rem; font-style: normal; font-weight: 600; }
   .venue-card__map { display: inline-block; margin-top: 0.35rem; font-weight: 600; text-underline-offset: 0.2em; }
-  .venue-card__groups { display: grid; margin-block: 1.5rem; border-top: 1px solid rgba(17, 24, 21, 0.25); }
-  .venue-card__groups li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.2rem 0.75rem; padding: 1rem 0; border-bottom: 1px solid rgba(17, 24, 21, 0.25); }
-  .venue-card__group { grid-column: 1 / -1; color: var(--deep); font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; text-transform: uppercase; }
-  .venue-card__days { font-weight: 600; }
-  .venue-card__groups time { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .venue-card__levels { display: grid; margin-block: 1.5rem; border-top: 1px solid rgba(17, 24, 21, 0.25); }
+  .venue-card__level { padding: 1rem 0; border-bottom: 1px solid rgba(17, 24, 21, 0.25); }
+  .venue-card__group { color: var(--deep); font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; text-transform: uppercase; }
+  .venue-card__schedules { display: grid; gap: 0.45rem; margin-top: 0.45rem; }
+  .venue-card__schedules li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 0.2rem 0.5rem; }
+  .venue-card__days { min-width: 0; font-weight: 600; overflow-wrap: anywhere; }
+  .venue-card__schedules time { font-variant-numeric: tabular-nums; white-space: nowrap; }
   .venue-card__cta { width: 100%; }
   .training__note { margin-top: 1.25rem; color: #46534b; font-size: 0.95rem; }
   .training__team { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; margin-top: 2rem; padding: clamp(1.25rem, 3vw, 2rem); background: var(--deep); color: var(--cream); }

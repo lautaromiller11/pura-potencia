@@ -38,7 +38,7 @@ export const social = {
 export const seo = {
   title: 'Escuela de Fútbol Femenino en Rosario | Pura Potencia',
   description:
-    'Entrenamientos de fútbol femenino en Rosario. Conocé nuestras sedes en Nexo Sports y Pichincha Point, consultá los horarios publicados y escribinos.',
+    'Entrenamientos de fútbol femenino en Rosario. Conocé nuestras sedes en Martino Complejos y Pichincha Point, consultá los horarios publicados y escribinos.',
   locale: 'es-AR',
   /** Imagen social (1200×630). Reemplazable: ver docs/ASSETS.md */
   ogImagePath: '/og-default.png',
