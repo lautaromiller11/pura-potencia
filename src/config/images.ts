@@ -54,7 +54,7 @@ export const gallery: GallerySlot[] = [
   { file: 'galeria-01-equipo.jpg', size: 'square', alt: 'El equipo posa después de un partido nocturno', suggested: 'galeria-01-equipo.jpg' },
   { file: 'galeria-02-equipo.jpg', size: 'square', alt: 'Jugadoras de Pura Potencia reunidas en la cancha', suggested: 'galeria-02-equipo.jpg' },
   { file: 'galeria-03-festejo.jpg', size: 'wide', alt: 'El equipo festeja con humo verde y celeste', suggested: 'galeria-03-festejo.jpg' },
-  { file: 'galeria-04-entrenamiento.jpg', size: 'square', alt: 'Dos jugadoras disputan una pelota durante el entrenamiento', suggested: 'galeria-04-entrenamiento.jpg' },
-  { file: 'galeria-05-entrenamiento.jpg', size: 'square', alt: 'Jugadoras se enfrentan en un partido de fútbol', suggested: 'galeria-05-entrenamiento.jpg' },
-  { file: 'galeria-06-equipo.jpg', size: 'square', alt: 'El plantel posa en equipo al terminar el partido', suggested: 'galeria-06-equipo.jpg' },
+  { file: 'galeria-04-equipo-verde.jpg', size: 'square', alt: 'El equipo de Pura Potencia posa con su camiseta verde en la cancha', suggested: 'galeria-04-equipo-verde.jpg' },
+  { file: 'galeria-05-charla-tactica.png', size: 'tall', alt: 'Una entrenadora y sus jugadoras observan una pizarra táctica en la cancha', suggested: 'galeria-05-charla-tactica.png' },
+  { file: 'galeria-06-partido.jpg', size: 'wide', alt: 'Dos jugadoras disputan una pelota frente al arco durante un partido', suggested: 'galeria-06-partido.jpg' },
 ];
