@@ -3,7 +3,7 @@ export interface Partner {
   description: string;
   whatsappMessage: string;
   logo: string;
-  instagramUrl: string;
+  websiteUrl: string;
 }
 
 export const partners: Partner[] = [
@@ -12,6 +12,6 @@ export const partners: Partner[] = [
     description: 'Una propuesta aliada de Pura Potencia que ofrece un beneficio exclusivo para el equipo.',
     whatsappMessage: 'Hola, quería consultar por el beneficio de Healthy Tortitas para el equipo de Pura Potencia.',
     logo: '/brand/healthy-tortitas.webp',
-    instagramUrl: 'https://www.instagram.com/healthytortitas/',
+    websiteUrl: 'https://www.healthytortitas.com.ar/',
   },
 ];

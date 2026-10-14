@@ -22,7 +22,7 @@ export const LIMITS = {
   messageMax: 2000,
 } as const;
 
-export type FieldName = 'name' | 'email' | 'phone' | 'reason' | 'message' | 'consent';
+export type FieldName = 'name' | 'email' | 'phone' | 'reason' | 'message';
 export type FieldErrors = Partial<Record<FieldName, string>>;
 
 export interface ContactInput {
@@ -31,11 +31,6 @@ export interface ContactInput {
   phone: string;
   reason: string;
   message: string;
-  consent: boolean;
-  /** Honeypot: debe llegar vacío. */
-  website: string;
-  /** Marca de tiempo (ms) de cuando se mostró el formulario. */
-  startedAt: number;
 }
 
 export interface ValidContact {
@@ -67,17 +62,12 @@ const multiLine = (value: unknown): string =>
 /** Convierte cualquier entrada desconocida en un ContactInput normalizado. */
 export function normalize(raw: unknown): ContactInput {
   const data = (typeof raw === 'object' && raw !== null ? raw : {}) as Record<string, unknown>;
-  const consent = data.consent === true || data.consent === 'true' || data.consent === 'on';
-  const startedAt = Number(data.startedAt);
   return {
     name: singleLine(data.name),
     email: singleLine(data.email).toLowerCase(),
     phone: singleLine(data.phone),
     reason: singleLine(data.reason),
     message: multiLine(data.message),
-    consent,
-    website: singleLine(data.website),
-    startedAt: Number.isFinite(startedAt) ? startedAt : 0,
   };
 }
 
@@ -95,7 +85,6 @@ export const MESSAGES = {
   messageRequired: 'Escribí tu consulta.',
   messageShort: `Contanos un poco más (mínimo ${LIMITS.messageMin} caracteres).`,
   messageLong: `El mensaje es demasiado largo (máximo ${LIMITS.messageMax} caracteres).`,
-  consentRequired: 'Para enviar la consulta tenés que aceptar la política de privacidad.',
 } as const;
 
 export type ValidationResult =
@@ -132,8 +121,6 @@ export function validate(input: ContactInput): ValidationResult {
   if (!input.message) errors.message = MESSAGES.messageRequired;
   else if (input.message.length < LIMITS.messageMin) errors.message = MESSAGES.messageShort;
   else if (input.message.length > LIMITS.messageMax) errors.message = MESSAGES.messageLong;
-
-  if (!input.consent) errors.consent = MESSAGES.consentRequired;
 
   if (Object.keys(errors).length > 0) return { ok: false, errors };
 

@@ -13,9 +13,6 @@ const warnings = [];
 if (!has('SITE_URL')) (isProd ? problems : warnings).push('SITE_URL vacío: el sitio se generará con noindex, sin canonical/sitemap/Open Graph absolutos.');
 else if (!/^https:\/\/[^/\s]+$/.test(env.SITE_URL.trim().replace(/\/+$/, ''))) problems.push('SITE_URL debe ser una URL https sin ruta (ej. https://tu-dominio.com.ar).');
 
-for (const k of ['RESEND_API_KEY', 'CONTACT_TO_EMAIL', 'CONTACT_FROM_EMAIL'])
-  if (!has(k)) (isProd ? problems : warnings).push(`${k} vacío: el formulario responderá "no disponible" (no se simula el envío).`);
-
 if (!has('WHATSAPP_NUMBER')) warnings.push('WHATSAPP_NUMBER vacío: no se mostrarán botones de WhatsApp.');
 
 const line = '─'.repeat(60);

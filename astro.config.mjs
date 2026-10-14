@@ -20,7 +20,7 @@ export default defineConfig({
   site,
   base,
   output: 'static', // todo el contenido público se genera de forma estática
-  ...(!isGithubPages ? { adapter: vercel() } : {}), // Pages no soporta funciones serverless
+  ...(!isGithubPages ? { adapter: vercel() } : {}), // Adaptador para despliegues no estáticos
   trailingSlash: 'never',
   build: { format: 'directory' },
   compressHTML: true,

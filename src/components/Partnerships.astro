@@ -29,11 +29,11 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
               <div class="partner-card__actions">
               <a class="btn btn--primary" href={whatsappHref} target={partnerWhatsappUrl ? '_blank' : undefined} rel={partnerWhatsappUrl ? 'noopener noreferrer' : undefined}>
                 {partnerWhatsappUrl && <Icons name="whatsapp" />}
-                Consultar el beneficio
+                Conocer beneficio
                 {partnerWhatsappUrl && <span class="sr-only"> (se abre en una pestaña nueva)</span>}
               </a>
-              <a class="btn btn--outline-dark" href={partner.instagramUrl} target="_blank" rel="noopener noreferrer">
-                <Icons name="instagram" /> Instagram de {partner.name}
+              <a class="btn btn--outline-dark" href={partner.websiteUrl} target="_blank" rel="noopener noreferrer">
+                <Icons name="arrow" /> Web de {partner.name}
                 <span class="sr-only"> (se abre en una pestaña nueva)</span>
               </a>
               </div>
