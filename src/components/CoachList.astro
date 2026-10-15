@@ -1,0 +1,19 @@
+---
+interface Props { title: string; items: string[] }
+const { title, items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <section class="coach-card__list" aria-label={title}>
+    <h4>{title}</h4>
+    <ul>{items.map((item) => <li>{item}</li>)}</ul>
+  </section>
+)}
+
+<style>
+  .coach-card__list { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(17,24,21,.22); }
+  .coach-card__list h4 { font-family: var(--font-display); font-size: 1.2rem; line-height: 1.1; text-transform: uppercase; }
+  .coach-card__list ul { display: grid; gap: .35rem; margin-top: .5rem; }
+  .coach-card__list li { position: relative; padding-left: 1rem; }
+  .coach-card__list li::before { content: ''; position: absolute; left: 0; top: .68em; width: .4rem; height: .4rem; background: var(--deep); border-radius: 50%; }
+</style>

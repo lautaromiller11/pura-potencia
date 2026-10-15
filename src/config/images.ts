@@ -36,9 +36,9 @@ export const photos = {
     suggested: 'escuela-jugadoras.jpg',
   },
   community: {
-    file: 'comunidad-trofeo.jpg',
-    alt: 'Una jugadora de Pura Potencia con su trofeo',
-    suggested: 'comunidad-equipo.jpg',
+    file: 'comunidad-equipo-celebrando.webp',
+    alt: 'Jugadoras de fútbol femenino celebran juntas en una cancha',
+    suggested: 'comunidad-equipo-celebrando.webp',
   },
 } satisfies Record<string, PhotoSlot>;
 
@@ -51,8 +51,8 @@ export interface GallerySlot extends PhotoSlot {
 }
 
 export const gallery: GallerySlot[] = [
-  { file: 'galeria-01-equipo.jpg', size: 'square', alt: 'El plantel de Pura Potencia posa junto en la cancha después de un partido', suggested: 'galeria-01-equipo.jpg' },
-  { file: 'galeria-02-equipo.jpg', size: 'square', alt: 'Jugadoras de Pura Potencia reunidas en la cancha', suggested: 'galeria-02-equipo.jpg' },
+  { file: 'galeria-01-equipo-festejo.webp', size: 'square', alt: 'Jugadoras con camisetas rosadas posan juntas en una cancha de fútbol', suggested: 'galeria-01-equipo-festejo.webp' },
+  { file: 'galeria-02-copa-queens.webp', size: 'square', alt: 'Jugadoras celebran juntas con sus trofeos en una cancha de fútbol', suggested: 'galeria-02-copa-queens.webp' },
   { file: 'galeria-03-festejo.jpg', size: 'wide', alt: 'El equipo festeja con humo verde y celeste', suggested: 'galeria-03-festejo.jpg' },
   { file: 'galeria-04-equipo-verde.jpg', size: 'square', alt: 'El equipo de Pura Potencia posa con su camiseta verde en la cancha', suggested: 'galeria-04-equipo-verde.jpg' },
   { file: 'galeria-05-charla-tactica.png', size: 'square', alt: 'Una entrenadora y sus jugadoras observan una pizarra táctica en la cancha', suggested: 'galeria-05-charla-tactica.png' },

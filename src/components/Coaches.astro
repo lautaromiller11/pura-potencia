@@ -1,0 +1,66 @@
+---
+import { coaches } from '../config/coaches.ts';
+import CoachList from './CoachList.astro';
+---
+
+<section id="entrenadoras" class="section section--cream coaches" aria-labelledby="entrenadoras-title">
+  <div class="container">
+    <header class="coaches__head" data-reveal>
+      <p class="eyebrow">Quienes acompañan cada entrenamiento</p>
+      <h2 id="entrenadoras-title" class="display h2">Nuestras entrenadoras</h2>
+      <p class="lead">Detrás de cada entrenamiento hay personas que comparten su pasión por el fútbol y acompañan a cada jugadora en su camino. Conocé a las entrenadoras de Pura Potencia.</p>
+    </header>
+
+    <div class="coaches__grid">
+      {coaches.map((coach) => (
+        <article class="coach-card" aria-labelledby={`${coach.id}-name`} data-reveal>
+          <div class="coach-card__photo">
+            {coach.photo ? (
+              <img src={coach.photo} alt={coach.photoAlt ?? `Retrato de ${coach.name}`} width="1086" height="1448" loading="lazy" />
+            ) : (
+              <div class="coach-card__placeholder" role="img" aria-label="Espacio reservado para la fotografía de la entrenadora">
+                <span class="coach-card__field" aria-hidden="true"></span>
+                <span class="coach-card__placeholder-label">Foto de la entrenadora<br /><small>Agregar en public/images/entrenadoras/</small></span>
+              </div>
+            )}
+          </div>
+          <div class="coach-card__body">
+            {coach.placeholder && <p class="coach-card__notice">Perfil de ejemplo · completar con datos confirmados</p>}
+            <h3 id={`${coach.id}-name`} class="display h3">{coach.name}</h3>
+            <p class="coach-card__role">{coach.role}</p>
+            {coach.bio && <p class="coach-card__bio">{coach.bio}</p>}
+            {coach.experience?.length && <CoachList title="Experiencia" items={coach.experience} />}
+            {coach.teams?.length && <CoachList title="Equipos" items={coach.teams} />}
+            {coach.achievements?.length && <CoachList title="Logros deportivos de sus equipos" items={coach.achievements} />}
+            {coach.qualifications?.length && <CoachList title="Formación" items={coach.qualifications} />}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .coaches__head { max-width: 55rem; }
+  .coaches__head .lead { margin-top: 1rem; }
+  .coaches__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; margin-top: clamp(2rem, 5vw, 3.5rem); }
+  .coach-card { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; overflow: hidden; background: var(--cream-2); border: 2px solid var(--ink); }
+  .coach-card__photo { aspect-ratio: 1 / 1; overflow: hidden; background: var(--sage); }
+  .coach-card__photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 27%; }
+  .coach-card__placeholder { position: relative; display: grid; place-items: center; width: 100%; height: 100%; min-height: 16rem; overflow: hidden; background: repeating-linear-gradient(90deg, rgba(17,24,21,.1) 0 2.25rem, transparent 2.25rem 4.5rem), var(--sage); }
+  .coach-card__field { position: absolute; inset: 10%; border: 2px solid rgba(243,235,215,.65); }
+  .coach-card__field::before { content: ''; position: absolute; inset: 0 50%; border-left: 2px solid rgba(243,235,215,.65); }
+  .coach-card__field::after { content: ''; position: absolute; width: 28%; aspect-ratio: 1; left: 50%; top: 50%; transform: translate(-50%,-50%); border: 2px solid rgba(243,235,215,.65); border-radius: 50%; }
+  .coach-card__placeholder-label { z-index: 1; padding: .6rem .8rem; background: var(--ink); color: var(--cream); text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; line-height: 1.2; text-transform: uppercase; }
+  .coach-card__placeholder-label small { font-family: var(--font-body); font-size: .72rem; font-weight: 500; text-transform: none; }
+  .coach-card__body { padding: clamp(1.25rem, 3vw, 2rem); }
+  .coach-card__notice { margin-bottom: .75rem; color: var(--deep); font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .coach-card__body h3 { font-size: clamp(1.8rem, 4vw, 2.5rem); }
+  .coach-card__role { margin-top: .4rem; color: var(--deep); font-weight: 700; }
+  .coach-card__bio { margin-top: 1rem; }
+  @media (min-width: 48rem) {
+    .coaches__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+    .coach-card { min-height: 100%; }
+    .coach-card__photo { aspect-ratio: 1 / 1; }
+  }
+</style>

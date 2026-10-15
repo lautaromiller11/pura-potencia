@@ -18,8 +18,13 @@ import { photos } from '../config/images.ts';
         <p><strong>Hay un lugar para vos:</strong> para jugar, para aprender y para ser parte.</p>
       </div>
     </div>
-    <div class="community__photo" data-reveal>
-      <Photo photo={photos.community} ratio="4 / 3" sizes="(min-width: 62rem) 30rem, 90vw" />
+    <div class="community__photos" data-reveal>
+      <div class="community__photo community__photo--main">
+        <Photo photo={photos.community} ratio="1 / 1" sizes="(min-width: 62rem) 26rem, 88vw" />
+      </div>
+      <div class="community__photo community__photo--overlap">
+        <Photo photo={photos.aboutMain} ratio="4 / 3" sizes="(min-width: 62rem) 17rem, 58vw" />
+      </div>
     </div>
   </div>
 </section>
@@ -31,9 +36,12 @@ import { photos } from '../config/images.ts';
   }
   .community__grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 3rem; align-items: center; }
   .community__quote { margin: 2rem 0; font-size: clamp(2rem, 6vw, 3.5rem); color: var(--mist); font-weight: 700; line-height: 0.95; }
-  .community__photo { max-width: 26rem; }
+  .community__photos { position: relative; width: min(100%, 34rem); padding-right: 7%; padding-bottom: clamp(7rem, 22vw, 9rem); }
+  .community__photo { overflow: hidden; }
+  .community__photo--main { width: 100%; }
+  .community__photo--overlap { position: absolute; right: 0; bottom: -1.25rem; width: 74%; border: 7px solid var(--deep); }
   @media (min-width: 62rem) {
-    .community__grid { grid-template-columns: 1.2fr 0.8fr; gap: 5rem; }
-    .community__photo { justify-self: end; }
+    .community__grid { grid-template-columns: 1.05fr 0.95fr; gap: 4rem; }
+    .community__photos { justify-self: end; }
   }
 </style>

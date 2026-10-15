@@ -30,7 +30,14 @@ const ratios = { tall: '3 / 4', wide: '4 / 3', square: '1 / 1' } as const;
           />
         </li>
       ))}
-      <li class="gallery__video-item">
+      <li class="gallery__video-item" data-video-switcher>
+        <button class="gallery__video-arrow gallery__video-arrow--prev" type="button" aria-label="Ver video anterior" data-step="-1">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m14.5 5-7 7 7 7" /></svg>
+        </button>
+        <button class="gallery__video-arrow gallery__video-arrow--next" type="button" aria-label="Ver video siguiente" data-step="1">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9.5 5 7 7-7 7" /></svg>
+        </button>
+        <span class="sr-only" aria-live="polite" data-video-status>Video 1 de 2: En la cancha</span>
         <video controls playsinline preload="metadata" poster={`${base}images/pura-potencia-video.jpg`} aria-label="Video de Pura Potencia en la cancha">
           <source src={`${base}videos/pura-potencia.mp4`} type="video/mp4" />
           Tu navegador no puede reproducir este video.
@@ -55,13 +62,61 @@ const ratios = { tall: '3 / 4', wide: '4 / 3', square: '1 / 1' } as const;
   .gallery__item--square { aspect-ratio: 1 / 1; }
   .gallery__item--wide { grid-column: span 2; }
   .gallery__item :global(.photo) { height: 100%; }
-  .gallery__video-item { grid-column: span 2; min-width: 0; min-height: 0; overflow: hidden; aspect-ratio: 9 / 16; background: var(--ink); }
+  .gallery__item:nth-child(1) { order: 1; }
+  .gallery__item:nth-child(2) { order: 2; }
+  .gallery__item:nth-child(3) { order: 3; }
+  .gallery__item:nth-child(4) { order: 4; }
+  .gallery__item:nth-child(5) { order: 6; }
+  .gallery__item:nth-child(6) { order: 7; }
+  .gallery__video-item { position: relative; grid-column: span 2; min-width: 0; min-height: 0; overflow: hidden; aspect-ratio: 9 / 16; background: var(--ink); }
+  .gallery__video-item { order: 5; }
   .gallery__video-item video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .gallery__video-arrow { position: absolute; z-index: 1; top: 50%; display: grid; place-items: center; width: 2.85rem; height: 2.85rem; padding: 0; transform: translateY(-50%); border: 1px solid rgba(255,255,255,0.72); border-radius: 50%; background: rgba(13, 31, 27, 0.48); color: var(--cream); box-shadow: 0 0.25rem 1rem rgba(0,0,0,0.22); backdrop-filter: blur(8px); cursor: pointer; transition: background-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease; }
+  .gallery__video-arrow svg { width: 1.35rem; height: 1.35rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .gallery__video-arrow--prev { left: 0.6rem; }
+  .gallery__video-arrow--next { right: 0.6rem; }
+  .gallery__video-arrow:hover { background: var(--cream); color: var(--ink); box-shadow: 0 0.35rem 1.25rem rgba(0,0,0,0.3); }
+  .gallery__video-arrow--prev:hover { transform: translate(-0.12rem, -50%); }
+  .gallery__video-arrow--next:hover { transform: translate(0.12rem, -50%); }
+  .gallery__video-arrow:focus-visible { outline: 3px solid var(--cream); outline-offset: 2px; }
   .gallery__more { margin-top: 2.5rem; }
   @media (min-width: 48rem) {
     .gallery__head { grid-template-columns: 1fr 1fr; }
     .gallery__head .lead { justify-self: end; }
     .gallery { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+    .gallery__item, .gallery__video-item { order: 0; }
     .gallery__video-item { grid-column: 3; grid-row: 1 / span 2; aspect-ratio: auto; }
   }
+  @media (max-width: 47.999rem) {
+    .gallery__item--wide { grid-column: auto; aspect-ratio: 1 / 1; }
+  }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-video-switcher]').forEach((switcher) => {
+    const video = switcher.querySelector('video');
+    const source = switcher.querySelector('source');
+    const status = switcher.querySelector<HTMLElement>('[data-video-status]');
+    const buttons = switcher.querySelectorAll<HTMLButtonElement>('.gallery__video-arrow');
+    if (!video || !source) return;
+
+    const choices = [
+      { src: `${import.meta.env.BASE_URL}videos/pura-potencia.mp4`, poster: `${import.meta.env.BASE_URL}images/pura-potencia-video.jpg`, label: 'Video de Pura Potencia en la cancha', name: 'En la cancha' },
+      { src: `${import.meta.env.BASE_URL}videos/galeria-entrenamiento.mp4`, poster: `${import.meta.env.BASE_URL}images/galeria-entrenamiento-poster.jpg`, label: 'Entrenamiento de fútbol femenino', name: 'Entrenamiento' },
+    ];
+    let current = 0;
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        current = (current + Number(button.dataset.step) + choices.length) % choices.length;
+        const choice = choices[current];
+        video.pause();
+        source.setAttribute('src', choice.src);
+        video.poster = choice.poster;
+        video.setAttribute('aria-label', choice.label);
+        if (status) status.textContent = `Video ${current + 1} de ${choices.length}: ${choice.name}`;
+        video.load();
+      });
+    });
+  });
+</script>
