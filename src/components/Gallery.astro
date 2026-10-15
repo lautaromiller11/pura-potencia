@@ -100,9 +100,10 @@ const ratios = { tall: '3 / 4', wide: '4 / 3', square: '1 / 1' } as const;
     const buttons = switcher.querySelectorAll<HTMLButtonElement>('.gallery__video-arrow');
     if (!video || !source) return;
 
+    const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
     const choices = [
-      { src: `${import.meta.env.BASE_URL}videos/pura-potencia.mp4`, poster: `${import.meta.env.BASE_URL}images/pura-potencia-video.jpg`, label: 'Video de Pura Potencia en la cancha', name: 'En la cancha' },
-      { src: `${import.meta.env.BASE_URL}videos/galeria-entrenamiento.mp4`, poster: `${import.meta.env.BASE_URL}images/galeria-entrenamiento-poster.jpg`, label: 'Entrenamiento de fútbol femenino', name: 'Entrenamiento' },
+      { src: `${base}videos/pura-potencia.mp4`, poster: `${base}images/pura-potencia-video.jpg`, label: 'Video de Pura Potencia en la cancha', name: 'En la cancha' },
+      { src: `${base}videos/galeria-entrenamiento.mp4`, poster: `${base}images/galeria-entrenamiento-poster.jpg`, label: 'Entrenamiento de fútbol femenino', name: 'Entrenamiento' },
     ];
     let current = 0;
 
