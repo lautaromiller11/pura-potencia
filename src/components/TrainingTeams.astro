@@ -2,6 +2,7 @@
 import { trainingTeams } from '../config/teams.ts';
 
 const hasTeams = trainingTeams.length > 0;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 ---
 
 <section id="equipos" class="section section--deep teams" aria-labelledby="teams-title">
@@ -19,7 +20,7 @@ const hasTeams = trainingTeams.length > 0;
             <article class="teams__card" data-team-card aria-label={`${index + 1} de ${trainingTeams.length}`}>
               <div class="teams__image">
                 {team.image ? (
-                  <img src={team.image} alt={team.alt ?? `Equipo ${team.name}`} loading="lazy" width="1440" height="960" />
+                  <img src={`${base}${team.image.replace(/^\/+/, '')}`} alt={team.alt ?? `Equipo ${team.name}`} loading="lazy" width="1440" height="960" />
                 ) : (
                   <div class="teams__placeholder" role="img" aria-label="Espacio reservado para la foto del equipo">
                     <span class="teams__field" aria-hidden="true"></span>

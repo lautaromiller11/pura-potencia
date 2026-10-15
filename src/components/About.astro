@@ -1,3 +1,7 @@
+---
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+
 <section id="escuela" class="section section--cream" aria-labelledby="escuela-title">
   <div class="container about">
     <div class="about__text" data-reveal>
@@ -20,8 +24,8 @@
 
     <div class="about__media" data-reveal>
       <div class="about__video">
-        <video controls playsinline preload="metadata" poster="/images/conoce-pura-potencia-poster.jpg" aria-label="Video de Pura Potencia en la cancha">
-          <source src="/videos/conoce-pura-potencia.mp4" type="video/mp4" />
+        <video controls playsinline preload="metadata" poster={`${base}images/conoce-pura-potencia-poster.jpg`} aria-label="Video de Pura Potencia en la cancha">
+          <source src={`${base}videos/conoce-pura-potencia.mp4`} type="video/mp4" />
           Tu navegador no puede reproducir este video.
         </video>
       </div>

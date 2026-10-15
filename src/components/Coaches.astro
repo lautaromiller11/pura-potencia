@@ -1,6 +1,7 @@
 ---
 import { coaches } from '../config/coaches.ts';
 import CoachList from './CoachList.astro';
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 ---
 
 <section id="entrenadoras" class="section section--cream coaches" aria-labelledby="entrenadoras-title">
@@ -16,7 +17,7 @@ import CoachList from './CoachList.astro';
         <article class="coach-card" aria-labelledby={`${coach.id}-name`} data-reveal>
           <div class="coach-card__photo">
             {coach.photo ? (
-              <img src={coach.photo} alt={coach.photoAlt ?? `Retrato de ${coach.name}`} width="1086" height="1448" loading="lazy" />
+              <img src={`${base}${coach.photo.replace(/^\/+/, '')}`} alt={coach.photoAlt ?? `Retrato de ${coach.name}`} width="1086" height="1448" loading="lazy" />
             ) : (
               <div class="coach-card__placeholder" role="img" aria-label="Espacio reservado para la fotografía de la entrenadora">
                 <span class="coach-card__field" aria-hidden="true"></span>
